@@ -1,24 +1,29 @@
+# Kütüphaneleri çağıralım.
 import numpy
 from heapq import *
 
-
+# Sezgisel Fonksiyonumuzu oluşturalım.
 def heuristic(a, b):
     return (b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2
 
 def astar(array, start, goal):
-
+# Komşuları tanımla. 0,0 kendisidir, alınmaz.
     neighbors = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(1,-1),(-1,1),(-1,-1)]
-
+    #Daha önce değerlendirilen düğüm kümesi.
     close_set = set()
+    # Boş harita // Gezinmiş düğümlerin haritası.
     came_from = {}
+    # En iyi bilinen yol boyunca başlangıçtan itibaren maliyet.
     gscore = {start:0}
+    # g_score[start] + heuristic_cost_estimate(start, goal)
     fscore = {start:heuristic(start, goal)}
+    #İlk olarak başlangıç düğümünü içeren, değerlendirilecek geçici düğümler kümesi.
     oheap = []
 
     heappush(oheap, (fscore[start], start))
 
     while oheap:
-
+        # En düşük f_score [] değerine sahip olan openset içindeki düğüm.
         current = heappop(oheap)[1]
 
         if current == goal:
@@ -30,17 +35,18 @@ def astar(array, start, goal):
 
         close_set.add(current)
         for i, j in neighbors:
-            neighbor = current[0] + i, current[1] + j            
+            neighbor = current[0] + i, current[1] + j     
+            # tentative_g_score := g_score[current] + dist_between(current,neighbor)
             tentative_g_score = gscore[current] + heuristic(current, neighbor)
             if 0 <= neighbor[0] < array.shape[0]:
                 if 0 <= neighbor[1] < array.shape[1]:                
                     if array[neighbor[0]][neighbor[1]] == 1:
                         continue
                 else:
-                    # array bound y walls
+                    # dizi y duvarlarına bağlı
                     continue
             else:
-                # array bound x walls
+                # dizi x duvarlarına bağlı
                 continue
 
             if neighbor in close_set and tentative_g_score >= gscore.get(neighbor, 0):
@@ -53,7 +59,7 @@ def astar(array, start, goal):
                 heappush(oheap, (fscore[neighbor], neighbor))
 
     return False
-
+#Labirenti oluştur.
 nmap = numpy.array([
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [1,1,1,1,1,1,1,1,1,1,1,1,0,1],
