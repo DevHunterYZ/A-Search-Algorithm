@@ -9,13 +9,12 @@ def heuristic(a, b):
 def astar(array, start, goal):
 # Komşuları tanımla. 0,0 kendisidir, alınmaz.
     neighbors = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(1,-1),(-1,1),(-1,-1)]
-    #Daha önce değerlendirilen düğüm kümesi.
+    # Daha önce değerlendirilen düğüm kümesi.
     close_set = set()
     # Boş harita // Gezinmiş düğümlerin haritası.
     came_from = {}
     # En iyi bilinen yol boyunca başlangıçtan itibaren maliyet.
     gscore = {start:0}
-    # g_score[start] + heuristic_cost_estimate(start, goal)
     fscore = {start:heuristic(start, goal)}
     #İlk olarak başlangıç düğümünü içeren, değerlendirilecek geçici düğümler kümesi.
     oheap = []
@@ -36,7 +35,6 @@ def astar(array, start, goal):
         close_set.add(current)
         for i, j in neighbors:
             neighbor = current[0] + i, current[1] + j     
-            # tentative_g_score := g_score[current] + dist_between(current,neighbor)
             tentative_g_score = gscore[current] + heuristic(current, neighbor)
             if 0 <= neighbor[0] < array.shape[0]:
                 if 0 <= neighbor[1] < array.shape[1]:                
